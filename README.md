@@ -1,4 +1,4 @@
-# person_vaccinated_java_hibernate
+# vaccinated_person_java_hibernate
 
 In this demo project we can see the connexion between java spring boot
 and hibernate to a postgres database.
