@@ -21,6 +21,9 @@ public class PersonControler {
   @Autowired
   private PersonRepository personRepository;
 
+  @Autowired
+  private PersonService service;
+
   /**
    * Get all persons list.
    *
@@ -28,7 +31,7 @@ public class PersonControler {
    */
   @GetMapping("/persons")   // GET Method for reading operation
   public List<Person> getALLPersons() {
-    return personRepository.findAll();
+    return service.getALLPersons();
   }
 
   /**
@@ -39,12 +42,8 @@ public class PersonControler {
    * @throws Exception
    */
   @GetMapping("/persons/{id}")    // GET Method for Read operation
-  public ResponseEntity<Person> getPersonId(@PathVariable(value = "id") Long personId)
-      throws Exception {
-
-    Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new Exception("Phone " + personId + " not found"));
-    return ResponseEntity.ok().body(person);
+  public ResponseEntity<Person> getPersonId(@PathVariable(value = "id") Long personId)  throws Exception {
+    return service.getPersonId(personId);
   }
 
   /**
@@ -55,13 +54,7 @@ public class PersonControler {
    */
   @PostMapping("/persons")     // POST Method for Create person
   public Person createPerson(@Valid @RequestBody Person person) {
-    try {
-      personRepository.save(person);
-      System.out.println("person added");
-
-    }catch (Exception e){
-      System.out.println(e);}
-            return person;
+   return service.createPerson(person);
   }
 
   /**
@@ -73,19 +66,18 @@ public class PersonControler {
    * @throws Exception
    */
   @PutMapping("/persons/{id}")    // PUT Method for Update operation
-  public ResponseEntity<Person> updatePerson(
-      @PathVariable(value = "id") Long personId, @Valid @RequestBody Person personDetails)
-      throws Exception {
+  public ResponseEntity<Person> updatePerson
+    ( @PathVariable(value = "id") Long personId, @Valid @RequestBody Person personDetails) throws Exception {
 
     Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new Exception("Perso " + personId + " not found"));
+                .orElseThrow(() -> new Exception("Person " + personId + " not found"));
 
     person.setFirst_name(personDetails.getFirst_name());
     person.setLast_name(personDetails.getLast_name());
     person.setVaccinated(personDetails.getVaccinated());
 
-    final Person updatePerson = personRepository.save(person);
-    return ResponseEntity.ok(updatePerson);
+    return service.updatePerson(person);
+
   }
 
   /**
@@ -96,13 +88,11 @@ public class PersonControler {
    * @throws Exception the exception
    */
   @DeleteMapping("/person/{id}")    // DELETE Method for Delete operation
-  public Map<String, Boolean> deletePhone(@PathVariable(value = "id") Long personId) throws Exception {
+  public Map<String, Boolean> deletePerson(@PathVariable(value = "id") Long personId) throws Exception {
     Person person = personRepository.findById(personId)
                 .orElseThrow(() -> new Exception("Person " + personId + " not found"));
 
     personRepository.delete(person);
-    Map<String, Boolean> response = new HashMap<>();
-    response.put("deleted", Boolean.TRUE);
-    return response;
+    return service.deletePerson(person);
   }
 }
