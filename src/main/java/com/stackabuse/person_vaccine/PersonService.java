@@ -23,7 +23,7 @@ public class PersonService {
 
     public ResponseEntity<Person> getPersonId(Long personId) throws Exception {
         Person person = personRepository.findById(personId)
-                .orElseThrow(() -> new Exception("Phone " + personId + " not found"));
+                .orElseThrow(() -> new Exception("Person " + personId + " not found"));
 
         return ResponseEntity.ok().body(person);
     }
