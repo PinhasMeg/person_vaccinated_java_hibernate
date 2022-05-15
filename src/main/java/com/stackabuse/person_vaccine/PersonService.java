@@ -1,10 +1,12 @@
 package com.stackabuse.person_vaccine;
 
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +18,21 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
+    private ModelMapper modelMapper=new ModelMapper();
 
-    public List<Person> getALLPersons() {
-        return personRepository.findAll();
+    public PersonDto getALLPersonsDto() {
+        List<Person> personList=personRepository.findAll();
+        PersonDto personDto=new PersonDto();
+
+        return personDto;
+
+    }
+
+    public void saveAllPersonDto(PersonDto personDto){
+        List<PersonDto> personDtoo=new ArrayList<>();
+        Person person=modelMapper.map(personDtoo,Person.class);
+        personRepository.save(person);
+
     }
 
     public ResponseEntity<Person> getPersonId(Long personId) throws Exception {

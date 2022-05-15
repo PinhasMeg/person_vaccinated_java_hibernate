@@ -29,9 +29,10 @@ public class PersonControler {
    *
    * @return the list
    */
+  @CrossOrigin(origins = "http://localhost:4200")
   @GetMapping("/persons")   // GET Method for reading operation
-  public List<Person> getALLPersons() {
-    return service.getALLPersons();
+  public PersonDto getALLPersons() {
+    return service.getALLPersonsDto();
   }
 
   /**
